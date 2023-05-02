@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <iomanip>
 #include <bits/stdc++.h>
 #include "Fraction.hpp"
 
@@ -13,7 +14,7 @@ namespace ariel
         if(denominator == 0)
         {
             std::cout << "denominator can't be o!";
-            throw std::exception();
+            throw std::invalid_argument("");
         }
         this->numerator = numerator;
         this->denominator = denominator;
@@ -21,12 +22,57 @@ namespace ariel
         d = std::gcd(numerator, denominator);
         this->numerator /= d;
         this->denominator /= d;
+        if(this->denominator < 0)
+        {
+            this->denominator = this->denominator * (-1);
+            this->numerator = this->numerator * (-1);
+        }
     }
 
+    Fraction::Fraction(float num)
+    {
+        if(num == 0.0)
+        {
+            std::cout << "number can't be o!";
+            throw std::exception();
+        }
+
+        int numerator = num * 1000;
+        int denominator = 1000;
+        int d = std::gcd(numerator, denominator);
+        numerator /= d;
+        denominator /= d;
+        this->denominator = denominator;
+        this->numerator = numerator;
+    }
     //Binary operatoes on the fraction
     //performing the operator with another fraction: fraction +,-,*,/ fraction
     Fraction Fraction::operator+(const Fraction& f)
     {
+        if((this->numerator == std::numeric_limits<int>::max() && this->denominator == std::numeric_limits<int>::max()) 
+            || (f.numerator == std::numeric_limits<int>::max() && f.denominator == std::numeric_limits<int>::max()))
+        {
+            int newNumerator = this->numerator * f.denominator + this->denominator * f.numerator;
+            int newDenominator = this->denominator * f.denominator;
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::min() && this->denominator == std::numeric_limits<int>::min()) 
+            || (f.numerator == std::numeric_limits<int>::min() && f.denominator == std::numeric_limits<int>::min()))
+        {
+            int newNumerator = this->numerator * f.denominator + this->denominator * f.numerator;
+            int newDenominator = this->denominator * f.denominator;
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::max() || this->denominator == std::numeric_limits<int>::max()) 
+            || (f.numerator == std::numeric_limits<int>::max() || f.denominator == std::numeric_limits<int>::max()))
+        {
+            throw std::overflow_error("");
+        }
+        if(this->numerator == std::numeric_limits<int>::min() || this->denominator == std::numeric_limits<int>::min() 
+            || f.numerator == std::numeric_limits<int>::min() || f.denominator == std::numeric_limits<int>::min())
+        {
+            throw std::overflow_error("");
+        }
         int newNumerator = this->numerator * f.denominator + this->denominator * f.numerator;
         int newDenominator = this->denominator * f.denominator;
         return Fraction(newNumerator, newDenominator);
@@ -34,6 +80,34 @@ namespace ariel
 
     Fraction Fraction::operator-(const Fraction& f)
     {
+        if((this->numerator == std::numeric_limits<int>::max() && this->denominator == std::numeric_limits<int>::max()) 
+            || (f.numerator == std::numeric_limits<int>::max() && f.denominator == std::numeric_limits<int>::max()))
+        {
+            int newNumerator = this->numerator * f.denominator - this->denominator * f.numerator;
+            int newDenominator = this->denominator * f.denominator;
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::min() && this->denominator == std::numeric_limits<int>::min()) 
+            || (f.numerator == std::numeric_limits<int>::min() && f.denominator == std::numeric_limits<int>::min()))
+        {
+            int newNumerator = this->numerator * f.denominator - this->denominator * f.numerator;
+            int newDenominator = this->denominator * f.denominator;
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::max() || this->denominator == std::numeric_limits<int>::max()) 
+            || (f.numerator == std::numeric_limits<int>::max() || f.denominator == std::numeric_limits<int>::max()))
+        {
+            throw std::overflow_error("");
+        }
+        if((this->numerator == std::numeric_limits<int>::min() || this->denominator == std::numeric_limits<int>::min()) 
+            || (f.numerator == std::numeric_limits<int>::min() || f.denominator == std::numeric_limits<int>::min()))
+        {
+            throw std::overflow_error("");
+        }
+        if((this->numerator == std::numeric_limits<int>::max() - 1) && (f.numerator == std::numeric_limits<int>::min() + 1))
+        {
+            throw std::overflow_error("");
+        }
         int newNumerator = this->numerator * f.denominator - this->denominator * f.numerator;
         int newDenominator = this->denominator * f.denominator;
         return Fraction(newNumerator, newDenominator);
@@ -41,6 +115,30 @@ namespace ariel
 
     Fraction Fraction::operator*(const Fraction& f)
     {
+        if((this->numerator == std::numeric_limits<int>::max() && this->denominator == std::numeric_limits<int>::max()) 
+            || (f.numerator == std::numeric_limits<int>::max() && f.denominator == std::numeric_limits<int>::max()))
+        {
+            int newNumerator = this->numerator * f.numerator;
+            int newDenominator = this->denominator * f.denominator;
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::min() && this->denominator == std::numeric_limits<int>::min()) 
+            || (f.numerator == std::numeric_limits<int>::min() && f.denominator == std::numeric_limits<int>::min()))
+        {
+            int newNumerator = this->numerator * f.numerator;
+            int newDenominator = this->denominator * f.denominator;
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::max() || this->denominator == std::numeric_limits<int>::max()) 
+            && (f.numerator == std::numeric_limits<int>::max() || f.denominator == std::numeric_limits<int>::max()))
+        {
+            throw std::overflow_error("");
+        }
+        if((this->numerator == std::numeric_limits<int>::min() || this->denominator == std::numeric_limits<int>::min()) 
+            && (f.numerator == std::numeric_limits<int>::min() || f.denominator == std::numeric_limits<int>::min()))
+        {
+            throw std::overflow_error("");
+        }
         int newNumerator = this->numerator * f.numerator;
         int newDenominator = this->denominator * f.denominator;
         return Fraction(newNumerator, newDenominator);
@@ -48,8 +146,44 @@ namespace ariel
 
     Fraction Fraction::operator/(const Fraction& f)
     {
+        if((this->numerator == std::numeric_limits<int>::max() && this->denominator == std::numeric_limits<int>::max()) 
+            || (f.numerator == std::numeric_limits<int>::max() && f.denominator == std::numeric_limits<int>::max()))
+        {
+            int newNumerator = this->numerator * f.denominator;
+            int newDenominator = this->denominator * f.numerator;
+            if(newDenominator == 0)
+            {
+                throw std::runtime_error("");
+            }
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::min() && this->denominator == std::numeric_limits<int>::min()) 
+            || (f.numerator == std::numeric_limits<int>::min() && f.denominator == std::numeric_limits<int>::min()))
+        {
+            int newNumerator = this->numerator * f.denominator;
+            int newDenominator = this->denominator * f.numerator;
+            if(newDenominator == 0)
+            {
+                throw std::runtime_error("");
+            }
+            return Fraction(newNumerator, newDenominator);
+        }
+        if((this->numerator == std::numeric_limits<int>::max() || this->denominator == std::numeric_limits<int>::max()) 
+            && (f.numerator == std::numeric_limits<int>::max() || f.denominator == std::numeric_limits<int>::max()))
+        {
+            throw std::overflow_error("");
+        }
+        if((this->numerator == std::numeric_limits<int>::min() || this->denominator == std::numeric_limits<int>::min()) 
+            && (f.numerator == std::numeric_limits<int>::min() || f.denominator == std::numeric_limits<int>::min()))
+        {
+            throw std::overflow_error("");
+        }
         int newNumerator = this->numerator * f.denominator;
         int newDenominator = this->denominator * f.numerator;
+        if(newDenominator == 0)
+        {
+            throw std::runtime_error("");
+        }
         return Fraction(newNumerator, newDenominator);
     }
 
@@ -142,38 +276,40 @@ namespace ariel
 
     //boolean operators on the fraction
     //performing the operator with another fraction: fraction >,<,==,<=,>= fraction
-    bool Fraction::operator>(const Fraction& f)
+    bool Fraction::operator>(const Fraction& f) const
     {
         float thisFrac = (float)this->numerator / this->denominator;
         float fFrac = (float)f.numerator / f.denominator;
         return thisFrac > fFrac;
     }
 
-    bool Fraction::operator<(const Fraction& f)
+    bool Fraction::operator<(const Fraction& f) const
     {
         float thisFrac = (float)this->numerator / this->denominator;
         float fFrac = (float)f.numerator / f.denominator;
         return thisFrac < fFrac;
     }
 
-    bool Fraction::operator>=(const Fraction& f)
+    bool Fraction::operator>=(const Fraction& f) const
     {
         float thisFrac = (float)this->numerator / this->denominator;
         float fFrac = (float)f.numerator / f.denominator;
         return thisFrac >= fFrac;
     }
 
-    bool Fraction::operator<=(const Fraction& f)
+    bool Fraction::operator<=(const Fraction& f) const
     {
         float thisFrac = (float)this->numerator / this->denominator;
         float fFrac = (float)f.numerator / f.denominator;
         return thisFrac <= fFrac;
     }
 
-    bool Fraction::operator==(const Fraction& f)
+    bool Fraction::operator==(const Fraction& f) const
     {
         float thisFrac = (float)this->numerator / this->denominator;
         float fFrac = (float)f.numerator / f.denominator;
+        thisFrac = round(thisFrac * 1000) / 1000.0f;
+        fFrac = round(fFrac * 1000) / 1000.0f;
         return thisFrac == fFrac;
     }
 
@@ -205,8 +341,7 @@ namespace ariel
     bool Fraction::operator==(float value)
     {
         Fraction valueFrac = floatToFraction(value);
-        //return (*this) == valueFrac;
-        return true;
+        return (*this) == valueFrac;
     }
 
     //performing the operator with number: float >,<,==,<=,>= fraction
@@ -243,23 +378,42 @@ namespace ariel
     //std operators
     std::ostream& operator<<(std::ostream& os, const Fraction& f)
     {
-        return os << f.numerator << "/" << f.denominator << " ";
+        return os << f.numerator << "/" << f.denominator;
     }
 
     std::istream& operator>>(std::istream& is, Fraction& f)
     {
-        char slash;
+        //char slash;
         int numerator, denominator;
-        is >> numerator >> slash >> denominator;
-        if (denominator == 0) 
+        if(is >> numerator >> denominator)
         {
-            // Handle division by zero error
+            if (denominator == 0) 
+            {
+                // Handle division by zero error
+                is.setstate(std::ios::failbit);
+                throw std::runtime_error("");
+            } 
+            else 
+            {
+                if(denominator < 0)
+                {
+                    f.denominator = denominator * (-1);
+                    f.numerator = numerator * (-1);
+                }
+                else
+                {
+                    f.numerator = numerator;
+                    f.denominator = denominator;
+                }
+            }
+        }
+        else
+        {
+            std::cerr << "Error: Invalid input format. Expected numerator/denominator." << std::endl;
+            // Set a failbit to indicate the error
             is.setstate(std::ios::failbit);
-        } 
-        else 
-        {
-            f.numerator = numerator;
-            f.denominator = denominator;
+            throw std::runtime_error("");
+
         }
         return is;
     }
